@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductsModule } from './products/products.module';
 import DataSource from './ormconfig';
 
 @Module({
@@ -10,6 +11,7 @@ import DataSource from './ormconfig';
         ...DataSource.options,
       }),
     }),
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [],
