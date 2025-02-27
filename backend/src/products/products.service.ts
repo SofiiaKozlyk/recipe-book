@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { Repository } from 'typeorm';
@@ -15,5 +15,30 @@ export class ProductsService {
     async createProduct(name: string, calories: number) {
         const product = this.productRepository.create({ name, calories });
         return await this.productRepository.save(product);
+    }
+
+    async getProductById(id: number): Promise<Product | undefined> {
+        const product = await this.productRepository.findOne({ where: { id } });
+        return product;
+    }
+
+    async updateProduct(id: number, name: string, calories: number) {
+        const product = await this.productRepository.findOne({ where: { id } });
+
+        if (name !== undefined) {
+            if (typeof name !== 'string' || name.trim().length < 1) {
+                throw new BadRequestException('Name must be a non-empty string');
+            }
+            product.name = name;
+        }
+
+        if (calories !== undefined) {
+            if (typeof calories !== 'number' || isNaN(calories)) {
+                throw new BadRequestException('Calories must be a valid number');
+            }
+            product.calories = calories;
+        }
+
+        return this.productRepository.save(product);
     }
 }
