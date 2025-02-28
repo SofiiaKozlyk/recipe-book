@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Recipe } from './recipe.entity';
 import { RecipeIngredient } from './recipe-ingredient.entity';
 import { Product } from 'src/products/product.entity';
@@ -85,5 +85,20 @@ export class RecipesService {
         }
 
         return this.getRecipeById(id);
+    }
+
+    async searchRecipes(title: string): Promise<Recipe[]> {
+        if (typeof title !== 'string' || title.trim().length === 0) {
+            throw new BadRequestException('Title must be a non-empty string');
+        }
+
+        return await this.recipeRepository.find({
+            where: { title: ILike(`%${title}%`) },
+            relations: ['ingredients', 'ingredients.product'],
+        });
+    }
+
+    async deleteRecipe(id: number): Promise<void> {
+        await this.recipeRepository.delete(id);
     }
 }

@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './recipe.entity';
 import { ProductsService } from '../products/products.service';
@@ -56,6 +56,15 @@ export class RecipesController {
         return await this.recipesService.createRecipe(body.title, body.description, body.ingredients);
     }
 
+    @Get('/search')
+    @ApiOperation({ summary: 'Search recipes by title' })
+    @ApiQuery({ name: 'title', type: String, description: 'Recipe title', example: 'charlotte' })
+    @ApiResponse({ status: 200, description: 'Recipes found', type: [Recipe] })
+    @ApiResponse({ status: 400, description: 'Validation error' })
+    async getRecipesByName(@Query('title') title: string) {
+        return await this.recipesService.searchRecipes(title);
+    }
+
     @Get('/:id')
     @ApiOperation({ summary: 'Get the recipe by id' })
     @ApiParam({ name: 'id', description: 'Recipe id', type: Number, example: 1 })
@@ -88,5 +97,21 @@ export class RecipesController {
         }
 
         return this.recipesService.updateRecipe(id, body.title, body.description, body.ingredients);
+    }
+
+    @Delete('/:id')
+    @ApiOperation({ summary: 'Delete the recipe by id' })
+    @ApiParam({ name: 'id', description: 'Recipe id', type: Number, example: 1 })
+    @ApiResponse({ status: 200, description: 'Recipe successfully deleted' })
+    @ApiResponse({ status: 404, description: 'Recipe not found' })
+    async deleteRecipe(@Param('id', ParseIntPipe) id: number) {
+        const recipe = await this.recipesService.getRecipeById(id);
+
+        if (!recipe) {
+            throw new NotFoundException(`Recipe with id ${id} not found`);
+        }
+
+        await this.recipesService.deleteRecipe(id);
+        return { message: 'Recipe successfully deleted' };
     }
 }
