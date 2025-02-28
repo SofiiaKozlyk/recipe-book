@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './recipe.entity';
 import { ProductsService } from '../products/products.service';
@@ -16,7 +16,7 @@ export class RecipesController {
     @ApiOperation({ summary: 'Get all recipes' })
     @ApiResponse({ status: 200, description: 'List of recipes', type: [Recipe] })
     async getAllRecipes() {
-        return this.recipesService.getAllRecipes();
+        return await this.recipesService.getAllRecipes();
     }
 
     @Post()
@@ -24,8 +24,7 @@ export class RecipesController {
     @ApiResponse({ status: 201, description: 'Recipe successfully created' })
     @ApiResponse({ status: 400, description: 'Validation error' })
     @ApiResponse({ status: 404, description: 'Product not found' })
-    async createRecipe(
-        @Body() @Body() body: CreateRecipeDto) {
+    async createRecipe(@Body() body: CreateRecipeDto) {
 
         if (!body.title || typeof body.title !== 'string' || body.title.trim() === '') {
             throw new BadRequestException('Title is required and must be a non-empty string');
@@ -54,6 +53,40 @@ export class RecipesController {
             }
         }
 
-        return this.recipesService.createRecipe(body.title, body.description, body.ingredients);
+        return await this.recipesService.createRecipe(body.title, body.description, body.ingredients);
+    }
+
+    @Get('/:id')
+    @ApiOperation({ summary: 'Get the recipe by id' })
+    @ApiParam({ name: 'id', description: 'Recipe id', type: Number, example: 1 })
+    @ApiResponse({ status: 200, description: 'Recipe found' })
+    @ApiResponse({ status: 404, description: 'Recipe not found' })
+    async getRecipeById(@Param('id', ParseIntPipe) id: number) {
+        const recipe = await this.recipesService.getRecipeById(id);
+
+        if (!recipe) {
+            throw new NotFoundException(`Recipe with id ${id} not found`);
+        }
+
+        return recipe;
+    }
+
+    @Put('/:id')
+    @ApiOperation({ summary: 'Update the recipe by id' })
+    @ApiParam({ name: 'id', description: 'Recipe id', type: Number, example: 1 })
+    @ApiResponse({ status: 200, description: 'Recipe updated' })
+    @ApiResponse({ status: 400, description: 'Validation error' })
+    @ApiResponse({ status: 404, description: 'Recipe or product not found' })
+    async updateRecipe(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() body: CreateRecipeDto,
+    ) {
+        const recipe = await this.recipesService.getRecipeById(id);
+
+        if (!recipe) {
+            throw new NotFoundException(`Recipe with id ${id} not found`);
+        }
+
+        return this.recipesService.updateRecipe(id, body.title, body.description, body.ingredients);
     }
 }
