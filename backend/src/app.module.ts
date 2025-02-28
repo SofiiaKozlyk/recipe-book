@@ -5,6 +5,9 @@ import { ProductsModule } from './products/products.module';
 // import DataSource from './ormconfig';
 import { config } from 'dotenv';
 import { Product } from './products/product.entity';
+import { RecipesModule } from './recipes/recipes.module';
+import { Recipe } from './recipes/recipe.entity';
+import { RecipeIngredient } from './recipes/recipe-ingredient.entity';
 
 config();
 
@@ -30,9 +33,10 @@ config();
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: false,
-    entities: [Product],
+    entities: [Product, Recipe, RecipeIngredient],
   }),
     ProductsModule,
+    RecipesModule,
   ]
 })
 export class AppModule { }

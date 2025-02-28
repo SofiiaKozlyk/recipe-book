@@ -1,6 +1,8 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { Product } from './products/product.entity';
+import { Recipe } from './recipes/recipe.entity';
+import { RecipeIngredient } from './recipes/recipe-ingredient.entity';
 
 config();
 
@@ -13,5 +15,5 @@ export default new DataSource({
     database: process.env.DB_DATABASE,
     migrations: ['./src/migrations/*.ts'],
     synchronize: false,
-    entities: [Product],
+    entities: [Product, Recipe, RecipeIngredient],
 });
