@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
@@ -40,5 +40,17 @@ export class ProductsService {
         }
 
         return this.productRepository.save(product);
+    }
+
+    async searchProducts(name: string): Promise<Product[]> {
+        if (typeof name !== 'string' || name.trim().length === 0) {
+            throw new BadRequestException('Name must be a non-empty string');
+        }
+        
+        return await this.productRepository.find({ where: { name: ILike(`%${name}%`) } });
+    }
+
+    async deleteProduct(id: number): Promise<void> {
+        await this.productRepository.delete(id);
     }
 }
