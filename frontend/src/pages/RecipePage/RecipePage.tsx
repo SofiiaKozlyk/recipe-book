@@ -1,19 +1,28 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { getRecipeById } from '../../api/recipeActions';
+import { deleteRecipe, getRecipeById } from '../../api/recipeActions';
 import { useRequest } from 'ahooks';
 import { useEffect, useState } from 'react';
 import type { Recipe } from '../../types/Recipe';
 import styles from "./RecipePage.module.css";
 import Loading from '../../components/Loading/Loading';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const RecipePage = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [recipe, setRecipe] = useState<Recipe>();
     const { loading, error, run: fetchRecipeAction } = useRequest(() => getRecipeById(Number(id)), {
         manual: true,
         onSuccess: (data) => {
             setRecipe(data);
+        },
+    });
+
+    const { loading: deleting, run: deleteRecipeAction } = useRequest(() => deleteRecipe(Number(id)), {
+        manual: true,
+        onSuccess: () => {
+            navigate('/');
         },
     });
 
@@ -31,7 +40,16 @@ const RecipePage = () => {
                 {!error && !loading &&
                     (
                         <>
-                            <h1 className={styles["title"]}>{recipe?.title}</h1>
+                            <div className={styles["title-container"]}>
+                                <h1 className={styles["title"]}>{recipe?.title}</h1>
+                                <button
+                                    className={styles["delete-button"]}
+                                    onClick={() => deleteRecipeAction()}
+                                    disabled={deleting}
+                                >
+                                    <DeleteIcon fontSize="small" />
+                                </button>
+                            </div>
                             <p className={styles["description"]}>{recipe?.description}</p>
 
                             <h3 className={styles["ingredients-title"]}>Інгредієнти:</h3>

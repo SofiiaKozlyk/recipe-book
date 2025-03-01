@@ -5,11 +5,31 @@
   text-align: center;
 }
 
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .title {
   font-size: 32px;
-  margin-bottom: 10px;
   color: #4caf50;
   font-weight: bold;
+  margin: 0;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d32f2f;
+  transition: color 0.3s ease;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  color: #b71c1c;
 }
 
 .description {

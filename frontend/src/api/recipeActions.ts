@@ -18,3 +18,11 @@ export const searchRecipes = async (title: string) => {
     return response.data;
 };
 
+export const createRecipe = async (recipe: { title: string; description: string; ingredients: { productId: number; amount: number }[] }) => {
+    const response = await axios.post(`${API_URL}/recipes`, recipe);
+    return response.data;
+};
+
+export const deleteRecipe = async (id: number) => {
+    await axios.delete(`${API_URL}/recipes/${id}`);
+};
