@@ -3,6 +3,8 @@ import { useRequest } from 'ahooks';
 import styles from "./RecipesDisplay.module.css";
 import { getAllRecipes } from "../../api/recipeActions";
 import { useEffect, useState } from "react";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Loading from "../Loading/Loading";
 
 const RecipesDisplay = () => {
   const [recipes, setRecipes] = useState([]);
@@ -21,18 +23,9 @@ const RecipesDisplay = () => {
     <div className={styles["recipes-container"]}>
       <h1>Рецепти</h1>
 
-      {loading && (
-        <div className={styles["loading"]}>
-          <div className={styles["spinner"]}></div>
-          <p>Завантаження...</p>
-        </div>
-      )}
+      {loading && <Loading />}
 
-      {error && (
-        <div className={styles["error-message"]}>
-          <p>Щось пішло не так! Спробуйте ще раз.</p>
-        </div>
-      )}
+      {error && <ErrorMessage />}
 
       <div className={styles["recipes-grid"]}>
         {recipes.map((recipe: { id: number; title: string }) => (

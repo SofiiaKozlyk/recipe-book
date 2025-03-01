@@ -1,0 +1,52 @@
+.recipe-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 18px;
+  color: #388e3c;
+  margin-bottom: 20px;
+}
+
+.ingredients-title {
+  font-size: 24px;
+  color: #388e3c;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.ingredients-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #e8f5e9;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.ingredient-name {
+  font-size: 16px;
+  color: #388e3c;
+  font-weight: bold;
+}
+
+.ingredient-amount {
+  font-size: 16px;
+  color: #4caf50;
+}
