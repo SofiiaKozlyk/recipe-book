@@ -1,0 +1,33 @@
+.menu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #4caf50;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-list {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 50px;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+    background-color: #388e3c;
+    border-radius: 5px;
+}
