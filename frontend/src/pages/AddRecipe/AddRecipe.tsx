@@ -13,6 +13,7 @@ const AddRecipe = () => {
     const [description, setDescription] = useState('');
     const [ingredients, setIngredients] = useState<{ id: string; productId: number; amount: number; name: string }[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [errors, setErrors] = useState<{ title?: string; description?: string; ingredients?: string }>({});
 
     const navigate = useNavigate();
 
@@ -26,8 +27,22 @@ const AddRecipe = () => {
         onSuccess: () => navigate('/'),
     });
 
+    const validate = () => {
+        const newErrors: { title?: string; description?: string; ingredients?: string } = {};
+
+        if (!title.trim()) newErrors.title = 'Назва рецепту не може бути порожньою';
+        if (!description.trim()) newErrors.description = 'Опис рецепту не може бути порожнім';
+        if (ingredients.length === 0) newErrors.ingredients = 'Додайте хоча б один інгредієнт';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validate()) return;
+
         const formattedIngredients = ingredients.map(({ productId, amount }) => ({
             productId,
             amount,
@@ -51,6 +66,8 @@ const AddRecipe = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     margin="normal"
+                    error={!!errors.title}
+                    helperText={errors.title}
                 />
                 <TextField
                     label="Опис рецепту"
@@ -61,6 +78,8 @@ const AddRecipe = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     margin="normal"
+                    error={!!errors.description}
+                    helperText={errors.description}
                 />
 
                 <Typography variant="h6">Додати інгредієнти:</Typography>
@@ -74,7 +93,9 @@ const AddRecipe = () => {
                             setIngredients([...ingredients, { id: uuidv4(), productId: value.id, amount: 1, name: value.name }]);
                         }
                     }}
-                    renderInput={(params) => <TextField {...params} label="Пошук продуктів" />}
+                    renderInput={(params) => <TextField {...params} label="Пошук продуктів" 
+                    error={!!errors.ingredients}
+                    helperText={errors.ingredients} />}
                 />
 
                 <div className={styles["ingredients-list"]}>
