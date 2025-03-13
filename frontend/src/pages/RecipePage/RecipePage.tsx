@@ -7,6 +7,7 @@ import styles from "./RecipePage.module.css";
 import Loading from '../../components/Loading/Loading';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Button } from '@mui/material';
 
 const RecipePage = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,6 +31,10 @@ const RecipePage = () => {
         fetchRecipeAction();
     }, [fetchRecipeAction]);
 
+    const handleEdit = () => {
+        navigate(`/edit/${id}`);
+    };
+
     return (
         <>
             <div className={styles["recipe-container"]}>
@@ -49,8 +54,14 @@ const RecipePage = () => {
                                 >
                                     <DeleteIcon fontSize="small" />
                                 </button>
+                                <Button variant="contained" color="primary" onClick={handleEdit}>Редагувати</Button>
                             </div>
-                            <p className={styles["description"]}>{recipe?.description}</p>
+                            {/* <p className={styles["description"]}>{recipe?.description}</p> */}
+                            <div className={styles["description"]}>
+                                {recipe?.description.split("\n").map((paragraph, index) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))}
+                            </div>
 
                             <h3 className={styles["ingredients-title"]}>Інгредієнти:</h3>
                             <ul className={styles["ingredients-list"]}>
