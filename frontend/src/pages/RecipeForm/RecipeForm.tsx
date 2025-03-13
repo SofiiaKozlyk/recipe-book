@@ -10,14 +10,14 @@ import { TransformedRecipe } from '../../types/TransformedRecipe';
 import { RecipeRequest, RecipeRequestMethod1, RecipeRequestMethod2 } from '../../types/RecipeRequestMethod';
 
 interface RecipeFormProps {
-    recipe: TransformedRecipe;
+    recipe?: TransformedRecipe;
     recipeRequest: RecipeRequest;
 }
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
-    const [title, setTitle] = useState(recipe.title || '');
-    const [description, setDescription] = useState(recipe.description || '');
-    const [ingredients, setIngredients] = useState<{ id: string; productId: number; amount: number; name: string }[]>(recipe.ingredients || []);
+    const [title, setTitle] = useState(recipe?.title || '');
+    const [description, setDescription] = useState(recipe?.description || '');
+    const [ingredients, setIngredients] = useState<{ id: string; productId: number; amount: number; name: string }[]>(recipe?.ingredients || []);
     const [searchTerm, setSearchTerm] = useState('');
     const [errors, setErrors] = useState<{ title?: string; description?: string; ingredients?: string }>({});
 
@@ -48,7 +48,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
             amount,
         }));
 
-        if (recipe.id !== null) {
+        if (recipe?.id !== undefined) {
             (recipeRequest as RecipeRequestMethod2)({ title, description, ingredients: formattedIngredients }, recipe.id);
         } else {
             (recipeRequest as RecipeRequestMethod1)({ title, description, ingredients: formattedIngredients });
