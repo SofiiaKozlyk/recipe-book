@@ -23,6 +23,16 @@ export const createRecipe = async (recipe: { title: string; description: string;
     return response.data;
 };
 
+export const editRecipe = async (recipe: { title?: string; description?: string; ingredients?: { productId: number; amount: number }[] }, id: number) => {
+    const response = await axios.put(`${API_URL}/recipes/${id}`, recipe);
+    return response.data;
+};
+
 export const deleteRecipe = async (id: number) => {
     await axios.delete(`${API_URL}/recipes/${id}`);
+};
+
+export const searchProducts = async (query: string) => {
+    const { data } = await axios.get(`${API_URL}/products/search?name=${query}`);
+    return data;
 };

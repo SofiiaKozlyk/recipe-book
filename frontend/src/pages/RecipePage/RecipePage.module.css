@@ -2,14 +2,19 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  text-align: center;
 }
 
 .title-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 15px;
   margin-bottom: 10px;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 10px;
 }
 
 .title {
@@ -29,6 +34,7 @@
 }
 
 .delete-button:hover {
+  background-color: #e1e1e1;
   color: #b71c1c;
 }
 
@@ -36,6 +42,12 @@
   font-size: 18px;
   color: #388e3c;
   margin-bottom: 20px;
+  line-height: 2; 
+}
+
+.description p {
+  text-indent: 1.25em;
+  margin: 0;
 }
 
 .ingredients-title {
@@ -69,4 +81,22 @@
 .ingredient-amount {
   font-size: 16px;
   color: #4caf50;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #358e39;
+  transition: color 0.3s ease;
+  margin-top: 10px;
+}
+
+.edit-button:hover {
+  background-color: #e1e1e1;
+  color: #2b752f;
+}
+
+.edit-icon {
+  font-size: 20px;
 }
