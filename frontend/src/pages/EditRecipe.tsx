@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRequest } from 'ahooks';
 import { editRecipe, getRecipeById } from './../api/recipeActions';
 import { v4 as uuidv4 } from 'uuid';
-import RecipeForm from './RecipeForm/RecipeForm';
+import RecipeForm from '../components/RecipeForm/RecipeForm';
 import { Ingredient } from './../types/Ingredient';
 import { TransformedRecipe } from './../types/TransformedRecipe';
 

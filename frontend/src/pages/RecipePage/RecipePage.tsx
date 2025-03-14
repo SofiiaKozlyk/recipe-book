@@ -7,7 +7,7 @@ import styles from "./RecipePage.module.css";
 import Loading from '../../components/Loading/Loading';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button } from '@mui/material';
+import { Edit } from "@mui/icons-material";
 
 const RecipePage = () => {
     const { id } = useParams<{ id: string }>();
@@ -47,19 +47,22 @@ const RecipePage = () => {
                         <>
                             <div className={styles["title-container"]}>
                                 <h1 className={styles["title"]}>{recipe?.title}</h1>
-                                <button
-                                    className={styles["delete-button"]}
-                                    onClick={() => deleteRecipeAction()}
-                                    disabled={deleting}
-                                >
-                                    <DeleteIcon fontSize="small" />
-                                </button>
-                                <Button variant="contained" color="primary" onClick={handleEdit}>Редагувати</Button>
+                                <div className={styles["buttons-container"]}>
+                                    <button
+                                        className={styles["delete-button"]}
+                                        onClick={() => deleteRecipeAction()}
+                                        disabled={deleting}
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </button>
+                                    <button className={styles["edit-button"]} onClick={handleEdit}>
+                                        <Edit className={styles["edit-icon"]} />
+                                    </button>
+                                </div>
                             </div>
-                            {/* <p className={styles["description"]}>{recipe?.description}</p> */}
                             <div className={styles["description"]}>
-                                {recipe?.description.split("\n").map((paragraph, index) => (
-                                    <p key={index}>{paragraph}</p>
+                                {recipe?.description.split("\n").map((paragraph) => (
+                                    <p key={crypto.randomUUID()}>{paragraph}</p>
                                 ))}
                             </div>
 

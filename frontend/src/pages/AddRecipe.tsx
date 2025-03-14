@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
 import { createRecipe } from '../api/recipeActions';
-import RecipeForm from './RecipeForm/RecipeForm';
+import RecipeForm from '../components/RecipeForm/RecipeForm';
 
 const AddRecipe = () => {
     const navigate = useNavigate();
