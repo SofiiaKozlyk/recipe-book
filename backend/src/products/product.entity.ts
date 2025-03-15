@@ -20,7 +20,8 @@ export class Product {
   @ApiProperty({ example: 100, description: 'The number of calories in the product' })
   calories: number;
 
-  @ManyToOne(() => User, (user) => user.products, { nullable: false, onDelete: 'CASCADE' })
+  @Expose()
+  @ManyToOne(() => User, (user) => user.products, { nullable: false, onDelete: 'CASCADE', eager: true })
   @ApiProperty({ type: () => User, description: 'User who created the product' })
   user: User;
 }

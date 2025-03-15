@@ -4,13 +4,15 @@ import { ILike, Repository } from 'typeorm';
 import { Recipe } from './recipe.entity';
 import { RecipeIngredient } from './recipe-ingredient.entity';
 import { Product } from 'src/products/product.entity';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class RecipesService {
     constructor(
         @InjectRepository(Recipe) private recipeRepository: Repository<Recipe>,
         @InjectRepository(RecipeIngredient) private recipeIngredientRepository: Repository<RecipeIngredient>,
-        @InjectRepository(Product) private productRepository: Repository<Product>
+        @InjectRepository(Product) private productRepository: Repository<Product>,
+        @InjectRepository(User) private usersRepository: Repository<User>,
     ) { }
 
     async getAllRecipes(): Promise<Recipe[]> {
@@ -24,8 +26,13 @@ export class RecipesService {
         });
     }
 
-    async createRecipe(title: string, description: string, ingredients: { productId: number; amount: number }[]) {
-        const recipe = this.recipeRepository.create({ title, description });
+    async createRecipe(title: string, description: string, ingredients: { productId: number; amount: number }[], userId: number) {
+        const user = await this.usersRepository.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const recipe = this.recipeRepository.create({ title, description, user });
         await this.recipeRepository.save(recipe);
 
         const recipeIngredients = ingredients.map((ing) =>

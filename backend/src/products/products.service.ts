@@ -1,19 +1,27 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { ILike, Repository } from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class ProductsService {
-    constructor(@InjectRepository(Product)
-    private productRepository: Repository<Product>) { }
+    constructor(
+        @InjectRepository(Product) private productRepository: Repository<Product>,
+        @InjectRepository(User) private usersRepository: Repository<User>
+    ) { }
 
     async getAllProducts(): Promise<Product[]> {
         return this.productRepository.find();
     }
 
-    async createProduct(name: string, calories: number) {
-        const product = this.productRepository.create({ name, calories });
+    async createProduct(name: string, calories: number, userId: number) {
+        const user = await this.usersRepository.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const product = this.productRepository.create({ name, calories, user });
         return await this.productRepository.save(product);
     }
 
@@ -46,7 +54,7 @@ export class ProductsService {
         if (typeof name !== 'string' || name.trim().length === 0) {
             throw new BadRequestException('Name must be a non-empty string');
         }
-        
+
         return await this.productRepository.find({ where: { name: ILike(`%${name}%`) } });
     }
 

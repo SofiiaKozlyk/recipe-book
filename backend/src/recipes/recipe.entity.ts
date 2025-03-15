@@ -21,11 +21,13 @@ export class Recipe {
     @ApiProperty({ example: 'To prepare apple charlotte, you will need...', description: 'Description of the recipe' })
     description: string;
 
+    @Expose()
     @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.recipe, { cascade: true })
     @ApiProperty({ type: () => RecipeIngredient, isArray: true, description: 'Recipe ingredients' })
     ingredients: RecipeIngredient[];
 
-    @ManyToOne(() => User, (user) => user.recipes, { nullable: false, onDelete: 'CASCADE' })
+    @Expose()
+    @ManyToOne(() => User, (user) => user.recipes, { nullable: false, onDelete: 'CASCADE', eager: true })
     @ApiProperty({ type: () => User, description: 'User who created the recipe' })
     user: User;
 }
