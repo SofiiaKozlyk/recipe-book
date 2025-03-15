@@ -8,7 +8,7 @@ export class CreateUserDto {
   @MinLength(4, { message: 'Username must be at least 4 characters long' })
   username: string;
 
-  @ApiProperty({ example: 'ivan@example.com', description: 'Email користувача' })
+  @ApiProperty({ example: 'ipz@example.com', description: 'Email користувача' })
   @IsNotEmpty()
   @IsEmail()
   email: string;
@@ -16,6 +16,6 @@ export class CreateUserDto {
   @ApiProperty({ example: 'password123', description: 'User password' })
   @IsNotEmpty()
   @IsString()
-  @MinLength(4, { message: 'Password must be at least 4 characters long' })
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password: string;
 }
