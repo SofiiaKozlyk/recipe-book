@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Product {
@@ -18,4 +19,9 @@ export class Product {
   @Column({ nullable: false, default: 1 })
   @ApiProperty({ example: 100, description: 'The number of calories in the product' })
   calories: number;
+
+  @Expose()
+  @ManyToOne(() => User, (user) => user.products, { nullable: false, onDelete: 'CASCADE', eager: true })
+  @ApiProperty({ type: () => User, description: 'User who created the product' })
+  user: User;
 }

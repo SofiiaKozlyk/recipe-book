@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { RecipeIngredient } from './recipe-ingredient.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Recipe {
@@ -20,7 +21,13 @@ export class Recipe {
     @ApiProperty({ example: 'To prepare apple charlotte, you will need...', description: 'Description of the recipe' })
     description: string;
 
+    @Expose()
     @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.recipe, { cascade: true })
     @ApiProperty({ type: () => RecipeIngredient, isArray: true, description: 'Recipe ingredients' })
     ingredients: RecipeIngredient[];
+
+    @Expose()
+    @ManyToOne(() => User, (user) => user.recipes, { nullable: false, onDelete: 'CASCADE', eager: true })
+    @ApiProperty({ type: () => User, description: 'User who created the recipe' })
+    user: User;
 }

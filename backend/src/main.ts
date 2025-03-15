@@ -13,6 +13,14 @@ async function bootstrap() {
     .setTitle('Recipe Book API')
     .setDescription('API for recipe and product management')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'access-token',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
