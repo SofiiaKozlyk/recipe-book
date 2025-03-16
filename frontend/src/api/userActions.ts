@@ -18,6 +18,11 @@ export const doRegister = async ({ username, email, password }: UserRegisterProp
   return response.data;
 };
 
+export const getUser = async (params: { id?: number; username?: string }) => {
+  const response = await axiosInstance.get('/users', { params });
+  return response.data;
+};
+
 export const updateUser = async (id: number, user: { username?: string, email?: string, password?: string }) => {
   const response = await axiosInstance.put(`/users/${id}`, user);
   return response.data;
