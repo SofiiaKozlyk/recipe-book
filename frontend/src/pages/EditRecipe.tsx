@@ -6,9 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 import RecipeForm from '../components/RecipeForm/RecipeForm';
 import { Ingredient } from './../types/Ingredient';
 import { TransformedRecipe } from './../types/TransformedRecipe';
+import { RootState } from '../store/store';
+import { useSelector } from 'react-redux';
 
 const EditRecipe = () => {
   const { id } = useParams<{ id: string }>();
+  const currentUserId = useSelector((state: RootState) => state.user.userId);
   const [recipe, setRecipe] = useState<TransformedRecipe | null>(null);
 
   const navigate = useNavigate();
@@ -18,6 +21,11 @@ const EditRecipe = () => {
     {
       manual: true,
       onSuccess: (data) => {
+        if (data.user.id !== currentUserId) {
+          navigate('/');
+          return;
+        }
+
         const transformedIngredients = data.ingredients.map((ingredient: Ingredient) => ({
           id: uuidv4(),
           productId: ingredient.product.id,
