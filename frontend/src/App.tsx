@@ -7,6 +7,8 @@ import AddRecipe from "./pages/AddRecipe";
 import EditRecipe from "./pages/EditRecipe";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
 
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
         <Route path="/recipe/:id" element={<RecipePage />} />
         <Route path="/addrecipe" element={<AddRecipe />} />
         <Route path="/edit/:id" element={<EditRecipe />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </>
   );

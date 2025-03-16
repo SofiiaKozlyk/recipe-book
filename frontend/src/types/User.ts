@@ -6,7 +6,6 @@ export interface UserRegisterPropsI {
   
   export interface UserLoginPropsI {
     username: string;
-    email: string;
     password: string;
   }
   
