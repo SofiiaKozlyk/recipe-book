@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { UserRegisterPropsI } from '../types/User';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginSchema = Yup.object({
+const RegisterSchema = Yup.object({
     username: Yup.string()
         .required('Required')
         .min(4, 'Must be at least 4 characters'),
@@ -36,7 +36,7 @@ const RegisterForm: React.FC = () => {
             </Typography>
             <Formik
                 initialValues={{ username: '', email: '', password: '' }}
-                validationSchema={LoginSchema}
+                validationSchema={RegisterSchema}
                 onSubmit={handleRegister}
             >
                 {({ errors, touched }) => (

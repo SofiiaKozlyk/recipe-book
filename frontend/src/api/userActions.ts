@@ -21,11 +21,10 @@ export const getUser = async (params: { id?: number; username?: string }) => {
   return response.data;
 };
 
-export const updateUser = async (id: number, user: { username?: string, email?: string, password?: string }) => {
-  const response = await axiosInstance.put(`/users/${id}`, user);
-  return response.data;
+export const doUpdate = async (id: number, user: { username?: string, email?: string, password?: string }) => {
+  return await axiosInstance.put(`/users/${id}`, user);
 };
 
-export const deleteUser = async (id: number) => {
+export const doDelete = async (id: number) => {
   await axiosInstance.delete(`/users/${id}`);
 };

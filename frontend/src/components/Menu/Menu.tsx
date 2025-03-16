@@ -19,6 +19,7 @@ const Menu = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         {isAuthenticated ? (
           <>
             <li><Link to="/addrecipe" className={styles["menu-item"]}>Add a recipe</Link></li>
+            <li><Link to="/myprofile" className={styles["menu-item"]}>My profile</Link></li>
             <li><Link to="/login" onClick={handleLogout} className={styles["menu-item"]}>Logout</Link></li>
           </>
         ) : (

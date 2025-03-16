@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import UserProfile from "./pages/UserProfile";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/edit/:id" element={<EditRecipe />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/myprofile" element={<UserProfile />} />
       </Routes>
     </>
   );

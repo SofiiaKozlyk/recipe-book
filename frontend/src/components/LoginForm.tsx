@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { UserLoginPropsI } from '../types/User';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginSchema = Yup.object({
+const LoginSchema = Yup.object({
     username: Yup.string()
         .required('Required')
         .min(4, 'Must be at least 4 characters'),

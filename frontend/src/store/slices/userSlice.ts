@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { doLogin, doRegister, getUser } from '../../api/userActions';
+import { doDelete, doLogin, doRegister, doUpdate, getUser } from '../../api/userActions';
 import { UserLoginPropsI, UserRegisterPropsI } from '../../types/User';
 
 enum UserState {
@@ -24,6 +24,16 @@ export const doLoginThunk = createAsyncThunk('api/auth/login', async (userData: 
 export const doRegisterThunk = createAsyncThunk('users/register', async (userData: UserRegisterPropsI) => {
     const response = await doRegister(userData);
     return response.data;
+});
+
+export const doUpdateThunk = createAsyncThunk('users/update', async ({ id, userData }: { id: number; userData: { username?: string; email?: string; password?: string } }) => {
+    const response = await doUpdate(id, userData);
+    return response.data;
+});
+
+export const doDeleteThunk = createAsyncThunk('users/delete', async (id: number, { dispatch }) => {
+    await doDelete(id);
+    dispatch(logout());
 });
 
 const getKeyValue = () => localStorage.getItem('token') ? localStorage.getItem('token') : null;
@@ -96,6 +106,14 @@ const userSlice = createSlice({
         });
         builder.addCase(doRegisterThunk.fulfilled, (state, action) => {
             state.key = null;
+            state.isAuthenticated = false;
+            state.userId = null;
+            state.state = UserState.loggedOut;
+        });
+        builder.addCase(doDeleteThunk.fulfilled, (state, action) => {
+            state.key = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
             state.isAuthenticated = false;
             state.userId = null;
             state.state = UserState.loggedOut;
