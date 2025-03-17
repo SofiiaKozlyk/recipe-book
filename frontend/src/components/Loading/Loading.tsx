@@ -6,7 +6,7 @@ const Loading = () => {
         <>
             <div className={styles["loading"]}>
                 <div className={styles["spinner"]}></div>
-                <p>Завантаження...</p>
+                <p>Loading...</p>
             </div>
         </>
     );

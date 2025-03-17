@@ -5,7 +5,7 @@ const ErrorMessage = () => {
     return (
         <>
             <div className={styles["error-message"]}>
-                <p>Щось пішло не так! Спробуйте ще раз.</p>
+                <p>Something went wrong! Try again.</p>
             </div>
         </>
     );

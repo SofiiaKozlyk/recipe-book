@@ -5,10 +5,10 @@ import { Recipe } from '../../types/Recipe';
 const RecipesDisplay: React.FC<{ recipes: Recipe[] }> = ({ recipes }) => {
   return (
     <div className={styles["recipes-container"]}>
-      <h1>Рецепти</h1>
+      <h1>Recipes</h1>
 
       {recipes.length === 0 ? (
-        <p className={styles["no-results"]}>Нічого не знайдено</p>
+        <p className={styles["no-results"]}>Nothing found</p>
       ) : (
         <div className={styles["recipes-grid"]}>
           {recipes.map((recipe) => (

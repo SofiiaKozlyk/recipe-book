@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { v4 as uuidv4 } from 'uuid';
 import { TransformedRecipe } from '../../types/TransformedRecipe';
 import { RecipeRequest, RecipeRequestMethod1, RecipeRequestMethod2 } from '../../types/RecipeRequestMethod';
+import { useLocation } from 'react-router-dom';
 
 interface RecipeFormProps {
     recipe?: TransformedRecipe;
@@ -15,6 +16,9 @@ interface RecipeFormProps {
 }
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
+    const location = useLocation();
+    const isEditMode = location.pathname.includes("/edit/");
+    
     const [title, setTitle] = useState(recipe?.title || '');
     const [description, setDescription] = useState(recipe?.description || '');
     const [ingredients, setIngredients] = useState<{ id: string; productId: number; amount: number; name: string }[]>(recipe?.ingredients || []);
@@ -30,9 +34,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
     const validate = () => {
         const newErrors: { title?: string; description?: string; ingredients?: string } = {};
 
-        if (!title.trim()) newErrors.title = 'Назва рецепту не може бути порожньою';
-        if (!description.trim()) newErrors.description = 'Опис рецепту не може бути порожнім';
-        if (ingredients.length === 0) newErrors.ingredients = 'Додайте хоча б один інгредієнт';
+        if (!title.trim()) newErrors.title = 'Recipe name cannot be empty';
+        if (!description.trim()) newErrors.description = 'Recipe description cannot be empty';
+        if (ingredients.length === 0) newErrors.ingredients = 'Add at least one ingredient';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -55,16 +59,18 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
         }
     };
 
-    const handleRemoveIngredient = (index: number) => {
-        setIngredients(ingredients.filter((_, i) => i !== index));
+    const handleRemoveIngredient = (id: string) => {
+        setIngredients((prevIngredients) => 
+            prevIngredients.filter((ingredient) => ingredient.id !== id)
+        );
     };
 
     return (
         <Container>
-            <Typography variant="h4" gutterBottom>Додати новий рецепт</Typography>
+            <Typography variant="h4" gutterBottom>Add a new recipe</Typography>
             <form onSubmit={handleSubmit}>
                 <TextField
-                    label="Назва рецепту"
+                    label="Recipe title"
                     variant="outlined"
                     fullWidth
                     value={title}
@@ -74,7 +80,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
                     helperText={errors.title}
                 />
                 <TextField
-                    label="Опис рецепту"
+                    label="Recipe description"
                     variant="outlined"
                     fullWidth
                     multiline
@@ -86,7 +92,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
                     helperText={errors.description}
                 />
 
-                <Typography variant="h6">Додати інгредієнти:</Typography>
+                <Typography variant="h6">Add ingredients:</Typography>
                 <Autocomplete
                     options={products || []}
                     getOptionLabel={(option) => option.name}
@@ -97,30 +103,33 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
                             setIngredients([...ingredients, { id: uuidv4(), productId: value.id, amount: 1, name: value.name }]);
                         }
                     }}
-                    renderInput={(params) => <TextField {...params} label="Пошук продуктів"
+                    renderInput={(params) => <TextField {...params} label="Search products"
                         error={!!errors.ingredients}
                         helperText={errors.ingredients} />}
                 />
 
                 <div className={styles["ingredients-list"]}>
-                    {ingredients.map((ingredient, index) => (
+                    {ingredients.map((ingredient) => (
                         <div key={`${ingredient.id}`} className={styles["ingredient-item"]}>
                             <Typography className={styles["ingredient-name"]}>{ingredient.name}</Typography>
                             <TextField
-                                label="Кількість (г)"
+                                label="Amount (g)"
                                 type="number"
                                 className={styles["amount-input"]}
                                 value={ingredient.amount}
                                 onChange={(e) => {
-                                    const newIngredients = [...ingredients];
-                                    newIngredients[index].amount = Math.max(1, Number(e.target.value));
-                                    setIngredients(newIngredients);
-                                }}
+                                    const updatedIngredients = ingredients.map((item) =>
+                                      item.id === ingredient.id
+                                        ? { ...item, amount: Math.max(1, Number(e.target.value)) }
+                                        : item
+                                    );
+                                    setIngredients(updatedIngredients);
+                                  }}
                                 inputProps={{ min: 1 }}
                             />
                             <button
                                 className={styles["delete-button"]}
-                                onClick={() => handleRemoveIngredient(index)}
+                                onClick={() => handleRemoveIngredient(ingredient.id)}
                             >
                                 <DeleteIcon fontSize="small" />
                             </button>
@@ -130,7 +139,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, recipeRequest }) => {
 
                 <Button variant="contained" type="submit" fullWidth
                     sx={{ backgroundColor: "#4caf50", marginTop: 2 }}>
-                    {/* {editing ? <CircularProgress size={24} sx={{ color: "#4caf50" }} /> : 'Змінити рецепт'} */}
+                        {isEditMode ? "Update Recipe" : "Add Recipe"}
                 </Button>
             </form>
         </Container>
