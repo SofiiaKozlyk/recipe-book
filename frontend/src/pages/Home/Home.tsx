@@ -24,7 +24,7 @@ const Home = () => {
     <div className={styles["home-container"]}>
       <input
         type="text"
-        placeholder="Пошук рецептів..."
+        placeholder="Searching for recipes..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className={styles["search-input"]}

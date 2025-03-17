@@ -47,10 +47,6 @@ const EditRecipe = () => {
     getRecipeRequest();
   }, [getRecipeRequest]);
 
-  // useEffect(() => {
-  //   console.log("Updated recipe:", recipe);
-  // }, [recipe]);
-
   const { runAsync: editRecipeRequest, loading: editing } = useRequest(editRecipe, {
     manual: true,
     onSuccess: () => navigate(`/recipe/${id}`),
@@ -59,7 +55,7 @@ const EditRecipe = () => {
   return recipe ? (
     <RecipeForm recipe={recipe} recipeRequest={editRecipeRequest} />
   ) : (
-    <p>Завантаження...</p>
+    <p>Loading...</p>
   );
 };
 

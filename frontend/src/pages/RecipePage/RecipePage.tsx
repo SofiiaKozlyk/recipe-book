@@ -73,7 +73,7 @@ const RecipePage = () => {
                                 ))}
                             </div>
 
-                            <h3 className={styles["ingredients-title"]}>Інгредієнти:</h3>
+                            <h3 className={styles["ingredients-title"]}>Ingredients:</h3>
                             <ul className={styles["ingredients-list"]}>
                                 {recipe?.ingredients.map((ingredient) => (
                                     <li key={ingredient.id} className={styles["ingredient-item"]}>

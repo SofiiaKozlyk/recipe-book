@@ -14,8 +14,6 @@ const Menu = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     <div className={styles["menu-container"]}>
       <ul className={styles["menu-list"]}>
         <li><Link to="/" className={styles["menu-item"]}>Recipes</Link></li>
-        {/* <li><Link to="/recipes" className={styles["menu-item"]}>Рецепти</Link></li> */}
-        {/* <li><Link to="/addrecipe" className={styles["menu-item"]}>Додати рецепт</Link></li> */}
         {isAuthenticated ? (
           <>
             <li><Link to="/addrecipe" className={styles["menu-item"]}>Add a recipe</Link></li>

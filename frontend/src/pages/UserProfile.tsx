@@ -60,7 +60,7 @@ const UserProfile: React.FC = () => {
         );
 
         if (Object.keys(filteredValues).length === 0) {
-            console.warn("Немає змін для оновлення");
+            console.warn("No changes to update");
             return;
         }
 
@@ -140,15 +140,26 @@ const UserProfile: React.FC = () => {
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                                     {isEditing ? (
                                         <>
-                                            <Button type="submit" variant="contained" color="primary">
+                                            <Button type="submit" variant="contained"
+                                                sx={{
+                                                    backgroundColor: "#4caf50", borderColor: "#4caf50", color: "#fef2f2",
+                                                    "&:hover": { backgroundColor: "#2b752f", borderColor: "#2b752f" }
+                                                }}>
                                                 Save Changes
                                             </Button>
-                                            <Button variant="outlined" color="primary" onClick={() => setIsEditing(false)}>
+                                            <Button variant="outlined" color="error"
+                                                sx={{ "&:hover": { borderColor: "#b71c1c" } }}
+                                                onClick={() => setIsEditing(false)}>
                                                 Exit
                                             </Button>
                                         </>
                                     ) : (
-                                        <Button variant="outlined" color="primary" onClick={() => setIsEditing(true)}>
+                                        <Button variant="outlined"
+                                            sx={{
+                                                borderColor: "#4caf50", color: "#4caf50",
+                                                "&:hover": { backgroundColor: "#f0f7f1", borderColor: "#2b752f", color: "#2b752f" }
+                                            }}
+                                            onClick={() => setIsEditing(true)}>
                                             Edit Info
                                         </Button>
                                     )}
