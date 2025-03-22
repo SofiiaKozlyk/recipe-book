@@ -2,7 +2,16 @@ import { Link } from "react-router-dom";
 import styles from "./RecipesDisplay.module.css";
 import { Recipe } from '../../types/Recipe';
 
-const RecipesDisplay: React.FC<{ recipes: Recipe[] }> = ({ recipes }) => {
+/**
+ * Displays a list of recipes.
+ */
+const RecipesDisplay: React.FC<
+{ 
+   /**
+   * Array of recipe objects to display.
+   */
+  recipes: Recipe[] 
+}> = ({ recipes }) => {
   return (
     <div className={styles["recipes-container"]}>
       <h1>Recipes</h1>
