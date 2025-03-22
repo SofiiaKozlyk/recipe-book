@@ -15,10 +15,21 @@ export class RecipesService {
         @InjectRepository(User) private usersRepository: Repository<User>,
     ) { }
 
+    /**
+    * Retrieves all recipes.
+    * 
+    * @returns {Promise<Recipe[]>} - A list of recipes.
+    */
     async getAllRecipes(): Promise<Recipe[]> {
         return this.recipeRepository.find({ relations: ['ingredients', 'ingredients.product'] });
     }
 
+    /**
+    * Retrieves a recipe by its unique ID.
+    * 
+    * @param {number} id - The ID of the recipe to retrieve.
+    * @returns {Promise<Recipe | null>} - The recipe with the specified ID or null if not found.
+    */
     async getRecipeById(id: number): Promise<Recipe | null> {
         return await this.recipeRepository.findOne({
             where: { id },
@@ -26,6 +37,17 @@ export class RecipesService {
         });
     }
 
+    /**
+    * Creates a new recipe.
+    * 
+    * @param {string} title - The title of the recipe.
+    * @param {string} description - The description of the recipe.
+    * @param {Array<{ productId: number; amount: number }>} ingredients - The list of ingredients with their product IDs and amounts.
+    * @param {number} userId - The ID of the user creating the recipe.
+    * @returns {Promise<Recipe>} - The newly created recipe.
+    * @throws {BadRequestException} - If the request data is invalid.
+    * @throws {NotFoundException} - If a referenced user or product does not exist.
+    */
     async createRecipe(title: string, description: string, ingredients: { productId: number; amount: number }[], userId: number) {
         const user = await this.usersRepository.findOne({ where: { id: userId } });
         if (!user) {
@@ -43,6 +65,17 @@ export class RecipesService {
         return this.getRecipeById(recipe.id);
     }
 
+    /**
+    * Updates an existing recipe.
+    * 
+    * @param {number} id - The ID of the recipe to update.
+    * @param {string} title - The updated title of the recipe.
+    * @param {string} description - The updated description of the recipe.
+    * @param {Array<{ productId: number; amount: number }>} ingredients - The updated list of ingredients with their product IDs and amounts.
+    * @returns {Promise<Recipe>} - The updated recipe.
+    * @throws {BadRequestException} - If the request data is invalid.
+    * @throws {NotFoundException} - If a referenced product does not exist.
+    */
     async updateRecipe(id: number, title: string, description: string, ingredients: { productId: number; amount: number }[]) {
         const recipe = await this.recipeRepository.findOne({ where: { id } });
 
@@ -94,6 +127,13 @@ export class RecipesService {
         return this.getRecipeById(id);
     }
 
+    /**
+    * Searches for recipes by title.
+    * 
+    * @param {string} title - The title of the recipe to search for.
+    * @returns {Promise<Recipe[]>} - A list of recipes that match the search query.
+    * @throws {BadRequestException} - If the query parameter is invalid.
+    */
     async searchRecipes(title: string): Promise<Recipe[]> {
         if (typeof title !== 'string' || title.trim().length === 0) {
             throw new BadRequestException('Title must be a non-empty string');
@@ -105,6 +145,12 @@ export class RecipesService {
         });
     }
 
+    /**
+    * Deletes a recipe by its unique ID.
+    * 
+    * @param {number} id - The ID of the recipe to delete.
+    * @returns {Promise<void>} - A void promise indicating the deletion was successful.
+    */
     async deleteRecipe(id: number): Promise<void> {
         await this.recipeRepository.delete(id);
     }
