@@ -19,8 +19,9 @@ const Home = () => {
 
   useEffect(() => {
     const consent = Cookies.get('cookieConsent');
+    const functional = Cookies.get("functionalCookies") === "true";
 
-    if (consent && consent === 'accepted') {
+    if (consent && consent === 'accepted' && functional) {
       const lastSearchTerm = Cookies.get('lastSearchTerm');
       if (lastSearchTerm) {
         setSearchTerm(lastSearchTerm);
@@ -32,7 +33,8 @@ const Home = () => {
 
   useEffect(() => {
     const consent = Cookies.get('cookieConsent');
-    if (consent && consent === 'accepted' && searchTerm) {
+    const functional = Cookies.get("functionalCookies") === "true";
+    if (consent && consent === 'accepted' && functional && searchTerm) {
       Cookies.set('lastSearchTerm', searchTerm, { expires: 365 });
     }
 

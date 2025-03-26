@@ -26,6 +26,17 @@
 .cookiePopup div {
     display: flex;
     gap: 12px;
+    margin-bottom: 5px;
+}
+
+.cookiePopup a {
+    color: #213547;
+    text-decoration: none;
+}
+
+.cookiePopup a:hover {
+    color: #388e3c;
+    text-decoration: underline;
 }
 
 .cookiePopup button {
@@ -38,23 +49,13 @@
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.cookiePopup button:first-child {
+.cookiePopup button {
     background: #4caf50;
     color: white;
 }
 
-.cookiePopup button:first-child:hover {
+.cookiePopup button:hover {
     background: #45a049;
-    transform: scale(1.05);
-}
-
-.cookiePopup button:last-child {
-    background: #f44336;
-    color: white;
-}
-
-.cookiePopup button:last-child:hover {
-    background: #d32f2f;
     transform: scale(1.05);
 }
 
