@@ -14,6 +14,11 @@ export class RecipesController {
         private readonly productsService: ProductsService
     ) { }
 
+    /**
+    * Retrieves all recipes.
+    * 
+    * @returns {Promise<Recipe[]>} - A list of recipes.
+    */
     @Get()
     @ApiOperation({ summary: 'Get all recipes' })
     @ApiResponse({ status: 200, description: 'List of recipes', type: [Recipe] })
@@ -22,6 +27,16 @@ export class RecipesController {
         return plainToInstance(Recipe, recipe, { excludeExtraneousValues: true });
     }
 
+    /**
+    * Adds a new recipe.
+    * 
+    * @param {CreateRecipeDto} body - The data for creating a new recipe.
+    * @param {Request} req - The request object containing the user information (authenticated via JWT).
+    * @returns {Promise<Recipe>} - The newly created recipe.
+    * @throws {BadRequestException} - If there are validation errors in the request body.
+    * @throws {UnauthorizedException} - If the user is not authenticated.
+    * @throws {NotFoundException} - If the associated product is not found.
+    */
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
@@ -65,6 +80,13 @@ export class RecipesController {
         return plainToInstance(Recipe, recipe, { excludeExtraneousValues: true });
     }
 
+    /**
+    * Searches for recipes by their title.
+    * 
+    * @param {string} title - The title of the recipe to search for.
+    * @returns {Promise<Recipe[]>} - A list of recipes that match the given title.
+    * @throws {BadRequestException} - If there is a validation error with the query parameter.
+    */
     @Get('/search')
     @ApiOperation({ summary: 'Search recipes by title' })
     @ApiQuery({ name: 'title', type: String, description: 'Recipe title', example: 'charlotte' })
@@ -75,6 +97,13 @@ export class RecipesController {
         return plainToInstance(Recipe, recipe, { excludeExtraneousValues: true });
     }
 
+    /**
+    * Retrieves a recipe by its unique ID.
+    * 
+    * @param {number} id - The ID of the recipe to retrieve.
+    * @returns {Promise<Recipe>} - The recipe with the specified ID.
+    * @throws {NotFoundException} - If the recipe with the given ID is not found.
+    */
     @Get('/:id')
     @ApiOperation({ summary: 'Get the recipe by id' })
     @ApiParam({ name: 'id', description: 'Recipe id', type: Number, example: 1 })
@@ -90,6 +119,18 @@ export class RecipesController {
         return plainToInstance(Recipe, recipe, { excludeExtraneousValues: true });
     }
 
+    /**
+    * Updates a recipe by its unique ID.
+    * 
+    * @param {number} id - The ID of the recipe to update.
+    * @param {CreateRecipeDto} body - The data to update the recipe with.
+    * @param {Request} req - The request object containing the user information (authenticated via JWT).
+    * @returns {Promise<Recipe>} - The updated recipe.
+    * @throws {BadRequestException} - If there are validation errors in the request body.
+    * @throws {UnauthorizedException} - If the user is not authenticated.
+    * @throws {ForbiddenException} - If the user is not authorized to update the recipe (only the creator or admin).
+    * @throws {NotFoundException} - If the recipe or product is not found.
+    */
     @Put('/:id')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
@@ -119,6 +160,16 @@ export class RecipesController {
         return plainToInstance(Recipe, updatedRecipe, { excludeExtraneousValues: true });
     }
 
+    /**
+    * Deletes a recipe by its unique ID.
+    * 
+    * @param {number} id - The ID of the recipe to delete.
+    * @param {Request} req - The request object containing the user information (authenticated via JWT).
+    * @returns {Promise<{ message: string }>} - A promise indicating the deletion was successful.
+    * @throws {UnauthorizedException} - If the user is not authenticated.
+    * @throws {ForbiddenException} - If the user is not authorized to delete the recipe (only the creator or admin).
+    * @throws {NotFoundException} - If the recipe with the given ID is not found.
+    */
     @Delete('/:id')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')

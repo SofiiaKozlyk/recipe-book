@@ -5,6 +5,7 @@ import { getAllRecipes, searchRecipes } from '../../api/recipeActions';
 import Loading from '../../components/Loading/Loading';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import { useRequest } from 'ahooks';
+import Cookies from 'js-cookie';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +18,26 @@ const Home = () => {
   );
 
   useEffect(() => {
+    const consent = Cookies.get('cookieConsent');
+    const functional = Cookies.get("functionalCookies") === "true";
+
+    if (consent && consent === 'accepted' && functional) {
+      const lastSearchTerm = Cookies.get('lastSearchTerm');
+      if (lastSearchTerm) {
+        setSearchTerm(lastSearchTerm);
+      }
+    }
+
+    fetchRecipes();
+  }, []);
+
+  useEffect(() => {
+    const consent = Cookies.get('cookieConsent');
+    const functional = Cookies.get("functionalCookies") === "true";
+    if (consent && consent === 'accepted' && functional && searchTerm) {
+      Cookies.set('lastSearchTerm', searchTerm, { expires: 365 });
+    }
+
     fetchRecipes();
   }, [searchTerm, fetchRecipes]);
 

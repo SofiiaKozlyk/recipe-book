@@ -11,6 +11,11 @@ import { plainToInstance } from 'class-transformer';
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 
+    /**
+     * Retrieves all products.
+     * 
+     * @returns {Promise<Product[]>} - A list of products.
+     */
     @Get()
     @ApiOperation({ summary: 'Get all products' })
     @ApiResponse({ status: 200, description: 'List of products' })
@@ -19,6 +24,15 @@ export class ProductsController {
         return plainToInstance(Product, product, { excludeExtraneousValues: true });
     }
 
+    /**
+     * Adds a new product.
+     * 
+     * @param {CreateProductDto} createProductDto - The product data.
+     * @param {Request} req - The request object containing user info.
+     * @returns {Promise<Product>} - The newly created product.
+     * @throws {BadRequestException} - If the request data is invalid.
+     * @throws {UnauthorizedException} - If the user is not authenticated.
+     */
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
@@ -42,6 +56,13 @@ export class ProductsController {
         return plainToInstance(Product, product, { excludeExtraneousValues: true });
     }
 
+    /**
+     * Searches for products by name.
+     * 
+     * @param {string} name - The product name to search for.
+     * @returns {Promise<Product[]>} - A list of matching products.
+     * @throws {BadRequestException} - If the search query is invalid.
+     */
     @Get('/search')
     @ApiOperation({ summary: 'Search products by name' })
     @ApiQuery({ name: 'name', type: String, description: 'Product name', example: 'apple' })
@@ -52,6 +73,13 @@ export class ProductsController {
         return plainToInstance(Product, product, { excludeExtraneousValues: true });
     }
 
+    /**
+     * Retrieves a product by its unique ID.
+     * 
+     * @param {number} id - The product ID.
+     * @returns {Promise<Product>} - The found product.
+     * @throws {NotFoundException} - If the product does not exist.
+     */
     @Get('/:id')
     @ApiOperation({ summary: 'Get the product by id' })
     @ApiParam({ name: 'id', description: 'Product id', type: Number, example: 1 })
@@ -66,6 +94,18 @@ export class ProductsController {
         return plainToInstance(Product, product, { excludeExtraneousValues: true });
     }
 
+    /**
+     * Updates an existing product.
+     * 
+     * @param {number} id - The ID of the product to update.
+     * @param {CreateProductDto} createProductDto - The updated product data.
+     * @param {Request} req - The request object containing user info.
+     * @returns {Promise<Product>} - The updated product.
+     * @throws {BadRequestException} - If the request data is invalid.
+     * @throws {UnauthorizedException} - If the user is not authenticated.
+     * @throws {ForbiddenException} - If the user does not have permission to update.
+     * @throws {NotFoundException} - If the product is not found.
+     */
     @Put('/:id')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
@@ -95,6 +135,16 @@ export class ProductsController {
         return plainToInstance(Product, updatedProduct, { excludeExtraneousValues: true });
     }
 
+    /**
+     * Deletes a product by its unique ID.
+     * 
+     * @param {number} id - The product ID.
+     * @param {Request} req - The request object containing user info.
+     * @returns {Promise<{ message: string }>} - A promise indicating the deletion was successful.
+     * @throws {UnauthorizedException} - If the user is not authenticated.
+     * @throws {ForbiddenException} - If the user does not have permission to delete.
+     * @throws {NotFoundException} - If the product is not found.
+     */
     @Delete('/:id')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')

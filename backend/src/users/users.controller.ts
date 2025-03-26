@@ -15,6 +15,15 @@ const MinPasswordLength = 6;
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
+  /**
+   * Retrieves a user by ID or username.
+   * Throws an error if neither parameter is provided.
+   *
+   * @param {number} [id] - The user's ID (optional).
+   * @param {string} [username] - The user's username (optional).
+   * @returns {Promise<User>} - Returns the user object.
+   * @throws {NotFoundException} - If no parameters are provided or the user is not found.
+   */
   @Get()
   @ApiOperation({ summary: 'Get an user by ID or username' })
   @ApiQuery({ name: 'id', required: false, description: 'ID of the user' })
@@ -40,6 +49,13 @@ export class UsersController {
     return plainToInstance(User, user, { excludeExtraneousValues: true });
   }
 
+  /**
+  * Registers a new user.
+  * 
+  * @param {CreateUserDto} createUserDto - The user data to register.
+  * @returns {Promise<User>} - Returns the created user object.
+  * @throws {BadRequestException} - If invalid data is provided.
+  */
   @ApiOperation({ summary: 'Registration of a new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered' })
   @ApiResponse({ status: 400, description: 'Invalid data provided' })
@@ -58,7 +74,17 @@ export class UsersController {
     return plainToInstance(User, user, { excludeExtraneousValues: true });
   }
 
-
+  /**
+     * Updates the user information.
+     *
+     * @param {number} id - The ID of the user to update.
+     * @param {UpdateUserDto} updateUserDto - The data to update the user with.
+     * @param {Request} req - The request object containing the logged-in user details.
+     * @returns {Promise<User>} - Returns the updated user object.
+     * @throws {UnauthorizedException} - If the user is not authorized.
+     * @throws {ForbiddenException} - If the user tries to update another user's information (unless admin).
+     * @throws {NotFoundException} - If the user with the given ID is not found.
+     */
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Update user information' })
@@ -77,7 +103,7 @@ export class UsersController {
     if (!req.user) {
       throw new UnauthorizedException('You must be logged in to perform this action.');
     }
-    
+
     const authenticatedUser = req.user as { id: number; isAdmin: boolean };
 
     if (!authenticatedUser.isAdmin && authenticatedUser.id !== id) {
@@ -92,11 +118,11 @@ export class UsersController {
 
     if (updateUserDto.email !== undefined) {
       const trimmedEmail = updateUserDto.email.trim();
-  
+
       if (!trimmedEmail || !/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
         throw new BadRequestException('Invalid email format.');
       }
-  
+
       updateUserDto.email = trimmedEmail;
     }
 
@@ -112,6 +138,16 @@ export class UsersController {
     return { message: 'User information updated successfully', user: plainToInstance(User, updatedUser, { excludeExtraneousValues: true }) };
   }
 
+  /**
+     * Deletes a user.
+     *
+     * @param {number} id - The ID of the user to delete.
+     * @param {Request} req - The request object containing the logged-in user details.
+     * @returns {Promise<{ message: string }>} - Returns an object with a success message.
+     * @throws {UnauthorizedException} - If the user is not authorized.
+     * @throws {ForbiddenException} - If the user tries to delete another user's account (unless admin).
+     * @throws {NotFoundException} - If the user with the given ID is not found.
+     */
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Delete a user' })
@@ -139,7 +175,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    
+
     await this.usersService.deleteUser(id);
     return { message: 'User deleted successfully' };
   }

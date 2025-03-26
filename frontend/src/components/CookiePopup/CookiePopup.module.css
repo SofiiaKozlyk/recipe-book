@@ -1,0 +1,76 @@
+.cookiePopup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background: rgba(200, 220, 200, 0.95);
+    color: #333;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+}
+
+.cookiePopup p {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.cookiePopup div {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.cookiePopup a {
+    color: #213547;
+    text-decoration: none;
+}
+
+.cookiePopup a:hover {
+    color: #388e3c;
+    text-decoration: underline;
+}
+
+.cookiePopup button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cookiePopup button {
+    background: #4caf50;
+    color: white;
+}
+
+.cookiePopup button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    .cookiePopup {
+        width: 95%;
+        padding: 14px 20px;
+    }
+
+    .cookiePopup p {
+        font-size: 14px;
+    }
+
+    .cookiePopup button {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+}

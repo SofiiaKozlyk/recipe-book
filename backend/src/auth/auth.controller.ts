@@ -8,6 +8,14 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
+  /**
+  * Authenticates a user and returns a JWT token.
+  * 
+  * @param {LoginDto} loginDto - The login credentials (username and password).
+  * @param {Response} res - The response object.
+  * @returns {Promise<{ accessToken: string, username: string }>} - A promise resolving to an object containing the JWT token and username.
+  * @throws {BadRequestException} - If validation fails.
+  */
   @ApiOperation({ summary: 'User login' })
   @ApiResponse({ status: 200, description: 'Successful authorization, returns a JWT token and username' })
   @ApiResponse({ status: 401, description: 'Invalid username or password' })
