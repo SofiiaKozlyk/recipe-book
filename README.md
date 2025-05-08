@@ -1,4 +1,4 @@
-# Project Name  
+# RecipeBook  
 
 **RecipeBook** is a web application for storing and managing recipes. Users can browse the recipes available in the database, and also register an account to be able to add their own recipes, edit them, and delete them. Users can also search for recipes by title.  
 
